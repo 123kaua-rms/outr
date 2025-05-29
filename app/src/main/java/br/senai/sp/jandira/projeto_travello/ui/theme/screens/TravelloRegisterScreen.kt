@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.ppppdm_school.screens
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -25,7 +26,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.projeto_travello.R
+import br.senai.sp.jandira.projeto_travello.model.usuario
+import br.senai.sp.jandira.projeto_travello.service.RetrofitFactory
 import br.senai.sp.jandira.projeto_travello.ui.theme.MontserratFontFamily
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.time.LocalDate
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,11 +45,12 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun TravelloRegisterScreen() {
-    var name by remember { mutableStateOf("") }
-    var username by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var Country by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var nome_completoState = remember { mutableStateOf("") }
+    var usernameState = remember { mutableStateOf("") }
+    var emailState = remember { mutableStateOf("") }
+    var id_paisState = remember { mutableStateOf("") }
+    var senhaState = remember { mutableStateOf("") }
+    val dataAtual = LocalDate.now().toString()
 
     Column(
         modifier = Modifier
@@ -88,18 +96,6 @@ fun TravelloRegisterScreen() {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Travello is a platform to capture, share, and discover travel experiences in a visual, light, and interactive way. It works like a digital Travel Diary...",
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Normal,
-                fontFamily = MontserratFontFamily,
-                color = Color(0xFFB4B4B4),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 24.dp)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
                 text = "Create an account",
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Medium,
@@ -109,7 +105,11 @@ fun TravelloRegisterScreen() {
 
             Spacer(modifier = Modifier.height(18.dp))
 
-            Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp)) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 40.dp)
+            ) {
                 Text(
                     text = "Name:",
                     fontSize = 11.sp,
@@ -131,10 +131,14 @@ fun TravelloRegisterScreen() {
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp)) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 40.dp)
+            ) {
                 OutlinedTextField(
-                    value = name,
-                    onValueChange = { name = it },
+                    value = nome_completoState.value,
+                    onValueChange = { nome_completoState.value = it },
                     modifier = Modifier
                         .weight(1f)
                         .height(36.dp)
@@ -143,8 +147,8 @@ fun TravelloRegisterScreen() {
                     singleLine = true
                 )
                 OutlinedTextField(
-                    value = username,
-                    onValueChange = { username = it },
+                    value = usernameState.value,
+                    onValueChange = { usernameState.value = it },
                     modifier = Modifier
                         .weight(1f)
                         .height(36.dp)
@@ -167,8 +171,8 @@ fun TravelloRegisterScreen() {
                     .padding(start = 40.dp)
             )
             OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
+                value = emailState.value,
+                onValueChange = { emailState.value = it },
                 modifier = Modifier
                     .width(280.dp)
                     .height(36.dp)
@@ -190,8 +194,8 @@ fun TravelloRegisterScreen() {
                     .padding(start = 40.dp)
             )
             OutlinedTextField(
-                value = Country,
-                onValueChange = { Country = it },
+                value = id_paisState.value,
+                onValueChange = { id_paisState.value = it },
                 modifier = Modifier
                     .width(280.dp)
                     .height(36.dp)
@@ -213,8 +217,8 @@ fun TravelloRegisterScreen() {
                     .padding(start = 40.dp)
             )
             OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
+                value = senhaState.value,
+                onValueChange = { senhaState.value = it },
                 modifier = Modifier
                     .width(280.dp)
                     .height(36.dp)
@@ -235,34 +239,52 @@ fun TravelloRegisterScreen() {
             Spacer(modifier = Modifier.height(28.dp))
 
             Button(
-                onClick = { /* TODO */ },
+                onClick = {
+                    val user = usuario(
+                        nome_completo = nome_completoState.value,
+                        username = usernameState.value,
+                        email = emailState.value,
+                        id_pais = id_paisState.value.toIntOrNull() ?: 0,
+                        senha = senhaState.value,
+                        data_cadastro = dataAtual
+                    )
+                    val call = RetrofitFactory()
+                        .getUserService()
+                        .registerUser(user)
+
+                    call.enqueue(object : Callback<usuario> {
+                        override fun onResponse(
+                            call: Call<usuario>,
+                            response: Response<usuario>
+                        ) {
+                            if (response.isSuccessful) {
+                                Log.i("API", "Usuário cadastrado com sucesso: ${response.body()}")
+                            } else {
+                                Log.e("API", "Erro ao cadastrar: ${response.code()}")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<usuario>, t: Throwable) {
+                            Log.e("API", "Falha na requisição: ${t.message}")
+                        }
+                    })
+                },
                 modifier = Modifier
-                    .width(220.dp)
-                    .height(43.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEA9720))
+                    .width(280.dp)
+                    .height(50.dp),
+                shape = RoundedCornerShape(13.dp)
             ) {
-                Text("Register",
-                    color = Color.White,
+                Text(
+                    text = "Register",
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    fontFamily = MontserratFontFamily,)
-            }
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            TextButton(onClick = { /* TODO */ }) {
-                Text("Already have an account? ",
-                    color = Color.Gray ,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = MontserratFontFamily,)
-                Text("Sign in",
-                    color = Color(0xFFEA9720),
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = MontserratFontFamily,)
+                    fontFamily = MontserratFontFamily
+                )
             }
         }
     }
 }
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
