@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.projeto_travello.ui.theme.screens
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -16,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -24,25 +24,26 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import br.senai.sp.jandira.ppppdm_school.screens.TravelloRegisterScreen
 import br.senai.sp.jandira.projeto_travello.R
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
+import br.senai.sp.jandira.projeto_travello.model.UsuarioLoginRequest
+import br.senai.sp.jandira.projeto_travello.model.UsuarioLoginResponse
+import br.senai.sp.jandira.projeto_travello.service.RetrofitFactory
 import br.senai.sp.jandira.projeto_travello.ui.theme.MontserratFontFamily
+import br.senai.sp.jandira.projeto_travello.ui.theme.Projeto_TravelloTheme
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            TravelloLoguinScreen()
-        }
-    }
-}
+
 
 @Composable
-fun TravelloLoguinScreen() {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun TravelloLoguinScreen(navegacao: NavHostController?) {
+    var emailState = remember { mutableStateOf("") }
+    var senhaState = remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -116,7 +117,7 @@ fun TravelloLoguinScreen() {
 
             Text(
                 text = "E-mail:",
-                fontSize = 11.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
                 fontFamily = MontserratFontFamily,
                 color = Color.Black,
@@ -125,11 +126,11 @@ fun TravelloLoguinScreen() {
                     .padding(start = 40.dp)
             )
             OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
+                value = emailState.value,
+                onValueChange = { emailState.value = it },
                 modifier = Modifier
-                    .width(280.dp)
-                    .height(45.dp)
+                    .width(335.dp)
+                    .height(53.dp)
                     .align(Alignment.CenterHorizontally),
                 shape = RoundedCornerShape(13.dp),
                 singleLine = true
@@ -141,7 +142,7 @@ fun TravelloLoguinScreen() {
 
             Text(
                 text = "Password:",
-                fontSize = 11.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
                 fontFamily = MontserratFontFamily,
                 color = Color.Black,
@@ -150,11 +151,11 @@ fun TravelloLoguinScreen() {
                     .padding(start = 40.dp)
             )
             OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
+                value = senhaState.value,
+                onValueChange = { senhaState.value = it },
                 modifier = Modifier
-                    .width(280.dp)
-                    .height(45.dp)
+                    .width(335.dp)
+                    .height(53.dp)
                     .align(Alignment.CenterHorizontally),
                 shape = RoundedCornerShape(13.dp),
                 visualTransformation = PasswordVisualTransformation(),
@@ -172,7 +173,36 @@ fun TravelloLoguinScreen() {
             Spacer(modifier = Modifier.height(50.dp))
 
             Button(
-                onClick = { /* TODO */ },
+                onClick = {
+                    val user = UsuarioLoginRequest(
+                        email = emailState.value,
+                        senha = senhaState.value
+                    )
+
+                    val call = RetrofitFactory()
+                        .getUserService()
+                        .loginUser(user)
+
+                    call.enqueue(object : Callback<UsuarioLoginResponse> {
+                        override fun onResponse(
+                            call: Call<UsuarioLoginResponse>,
+                            response: Response<UsuarioLoginResponse>
+                        ) {
+                            if (response.isSuccessful) {
+                                val body = response.body()
+                                Log.i("API", "Login bem-sucedido: ${body?.usuario}")
+                                navegacao?.navigate("cadastro_viagem")
+
+                            } else {
+                                Log.e("API", "Erro no login: ${response.code()} - ${response.errorBody()?.string()}")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<UsuarioLoginResponse>, t: Throwable) {
+                            Log.e("API", "Falha na requisição: ${t.message}")
+                        }
+                    })
+                },
                 modifier = Modifier
                     .width(220.dp)
                     .height(43.dp),
@@ -204,5 +234,5 @@ fun TravelloLoguinScreen() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun TravelloLoguinScreenPreview() {
-    TravelloLoguinScreen()
-}
+        TravelloLoguinScreen(null)
+    }
