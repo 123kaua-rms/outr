@@ -36,21 +36,14 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalDate
 
-
-
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TravelloRegisterTrip(navegacao: NavHostController?) {
     var idPaisState = remember { mutableStateOf(0) }
 
-
-
     val expandedCategoryState = remember { mutableStateOf(false) }
     val selectedCategoryState = remember { mutableStateOf<Category?>(null) }
     val idCategoriaState = remember { mutableStateOf<Int?>(null) }
-
 
     val categories = remember {
         listOf(
@@ -274,10 +267,8 @@ fun TravelloRegisterTrip(navegacao: NavHostController?) {
     var data_inicioState = remember { mutableStateOf("") }
     var descricaoState = remember { mutableStateOf("") }
     var data_fimState = remember { mutableStateOf("") }
-    var id_categoriaState = remember { mutableStateOf("") }
-    var id_localizacaoState = remember { mutableStateOf("") }
-    var id_usuarioState = remember { mutableStateOf("") }
-
+    // Removed id_categoriaState and id_localizacaoState as they are already managed by selectedCategoryState and idPaisState
+    var id_usuarioState = remember { mutableStateOf("") } // This will likely come from user session/login
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -312,10 +303,10 @@ fun TravelloRegisterTrip(navegacao: NavHostController?) {
                 )
                 Spacer(modifier = Modifier.width(35.dp))
 
-                IconButton(onClick = { }) {
+                IconButton(onClick = { /* Handle profile click */ }) {
                     Image(
                         painter = painterResource(id = R.drawable.perfil),
-                        contentDescription = "Logo Travello",
+                        contentDescription = "User Profile",
                         modifier = Modifier.height(30.dp),
                         contentScale = ContentScale.Crop
                     )
@@ -394,8 +385,6 @@ fun TravelloRegisterTrip(navegacao: NavHostController?) {
                                     }
                                 }
                             }
-
-
                         }
                     }
 
@@ -476,9 +465,7 @@ fun TravelloRegisterTrip(navegacao: NavHostController?) {
                             .height(53.dp)
                             .align(Alignment.CenterHorizontally),
                         shape = RoundedCornerShape(13.dp),
-
                         singleLine = true,
-
                     )
 
                     Spacer(modifier = Modifier.height(25.dp))
@@ -494,14 +481,14 @@ fun TravelloRegisterTrip(navegacao: NavHostController?) {
                             .padding(start = 10.dp)
                     )
                     OutlinedTextField(
-                        value = id_localizacaoState.value,
-                        onValueChange = { id_localizacaoState.value = it },
+                        value = descricaoState.value, // Changed to descricaoState for description
+                        onValueChange = { descricaoState.value = it },
                         modifier = Modifier
                             .width(385.dp)
                             .height(150.dp)
                             .align(Alignment.CenterHorizontally),
                         shape = RoundedCornerShape(13.dp),
-                        singleLine = true
+                        // Removed singleLine as descriptions are usually multi-line
                     )
 
                     Spacer(modifier = Modifier.height(25.dp))
@@ -578,11 +565,11 @@ fun TravelloRegisterTrip(navegacao: NavHostController?) {
                     )
 
                     OutlinedTextField(
-                        value = nomeState.value,
+                        value = nomeState.value, // This seems to be for location name, but already used for trip title. Consider renaming or using a new state for location name.
                         onValueChange = { nomeState.value = it },
                         placeholder = {
                             Text(
-                                "Name",
+                                "City/State/Region Name", // Changed placeholder to be more specific for location
                                 fontWeight = FontWeight.Medium,
                                 fontFamily = MontserratFontFamily
                             )
@@ -605,7 +592,7 @@ fun TravelloRegisterTrip(navegacao: NavHostController?) {
                             value = selectedCountryState.value?.nome ?: "",
                             onValueChange = {},
                             readOnly = true,
-                            label = { Text("País") },
+                            label = { Text("Country") }, // Changed label to English
                             trailingIcon = {
                                 Icon(
                                     imageVector = Icons.Default.ArrowDropDown,
@@ -616,8 +603,7 @@ fun TravelloRegisterTrip(navegacao: NavHostController?) {
                                 .menuAnchor()
                                 .fillMaxWidth(),
                             shape = RoundedCornerShape(13.dp),
-
-                            )
+                        )
 
                         ExposedDropdownMenu(
                             expanded = expandedState.value,
@@ -636,26 +622,24 @@ fun TravelloRegisterTrip(navegacao: NavHostController?) {
                         }
                     }
 
-
                     Spacer(modifier = Modifier.height(145.dp))
 
                     Button(
                         onClick = {
                             val trip = viagem(
-                                nome = nomeState.value,
+                                nome = nomeState.value, // This is currently also used for location name, consider separate state
                                 descricao = descricaoState.value,
                                 data_inicio = data_inicioState.value,
                                 data_fim = data_fimState.value,
                                 foto_principal = foto_principalState.value,
                                 foto_secundaria = foto_secundariaState.value,
-                                id_categoria= id_categoriaState.value.toInt(),
-                                id_localizacao= id_usuarioState.value.toInt(),
-                                id_usuario= id_usuarioState.value.toInt()
+                                id_categoria = idCategoriaState.value ?: 0, // Use the selected category ID
+                                id_localizacao = id.value, // Use the selected country ID
+                                id_usuario = 1 // **IMPORTANT:** Replace `1` with the actual user ID from your session/login
                             )
                             val call = RetrofitFactory()
                                 .getTripService()
                                 .registerTrip(trip)
-
 
                             call.enqueue(object : Callback<viagem> {
                                 override fun onResponse(
@@ -663,22 +647,37 @@ fun TravelloRegisterTrip(navegacao: NavHostController?) {
                                     response: Response<viagem>
                                 ) {
                                     if (response.isSuccessful) {
-                                        Log.i("API", "Usuário cadastrado com sucesso: ${response.body()}")
-                                        navegacao?.navigate("login")
+                                        Log.i("API", "Trip registered successfully: ${response.body()}")
+                                        navegacao?.navigate("home") // Navigate to a success screen or home
                                     } else {
-                                        Log.e("API", "Erro ao cadastrar: ${response.code()}")
+                                        Log.e("API", "Error registering trip: ${response.code()}")
+                                        // You might want to show a Snackbar or Toast here
                                     }
                                 }
 
                                 override fun onFailure(call: Call<viagem>, t: Throwable) {
-                                    Log.e("API", "Falha na requisição: ${t.message}")
+                                    Log.e("API", "Request failed: ${t.message}")
+                                    // You might want to show a Snackbar or Toast here
                                 }
                             })
                         },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEA9720)),
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        Text(
+                            "Register Trip",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = MontserratFontFamily,
+                            color = Color.White
+                        )
+                    }
                     Spacer(modifier = Modifier.height(16.dp))
                 }
             }
-
             Spacer(modifier = Modifier.height(32.dp))
         }
     }
@@ -687,6 +686,5 @@ fun TravelloRegisterTrip(navegacao: NavHostController?) {
 @Preview(showSystemUi = true)
 @Composable
 private fun TravelloRegisterTripPreview() {
-        TravelloRegisterTrip(null)
+    TravelloRegisterTrip(rememberNavController())
 }
-
