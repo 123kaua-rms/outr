@@ -2,9 +2,9 @@ package br.senai.sp.jandira.projeto_travello.service
 
 
 import br.senai.sp.jandira.projeto_travello.model.CountryResponse
-import br.senai.sp.jandira.projeto_travello.model.UsuarioLoginRequest
 import br.senai.sp.jandira.projeto_travello.model.usuario
-import br.senai.sp.jandira.projeto_travello.model.UsuarioLoginResponse
+import br.senai.sp.jandira.projeto_travello.model.Location
+import br.senai.sp.jandira.projeto_travello.model.viagem
 
 
 import retrofit2.http.Body
@@ -21,18 +21,5 @@ interface UserService {
     @POST("usuario")
     fun registerUser(@Body user: usuario): retrofit2.Call<usuario>
 
-
-    @Headers("Content-Type: application/json")
-    @POST("usuario/login")
-    fun loginUser(@Body user: UsuarioLoginRequest): retrofit2.Call<UsuarioLoginResponse>
-
-
-
-
 }
-interface CountryService {
 
-    @GET("pais")
-    fun getCountries(): CountryResponse
-
-}

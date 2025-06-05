@@ -8,7 +8,7 @@ import retrofit2.http.GET
 
 class RetrofitFactory {
 
-    private val BASE_URL = "http://10.107.134.38:8080/v1/travello/"
+    private val BASE_URL = "http://10.107.144.35:8080/v1/travello/"
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
@@ -18,9 +18,8 @@ class RetrofitFactory {
     fun getUserService(): UserService {
         return retrofit.create(UserService::class.java)
     }
-
-    fun getPaisService(): CountryService {
-        return retrofit.create(CountryService::class.java)
+    fun getTripService(): TripService {
+        return retrofit.create(TripService::class.java)
     }
 
 }
