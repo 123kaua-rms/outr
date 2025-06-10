@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import br.senai.sp.jandira.projeto_travello.R
-import br.senai.sp.jandira.projeto_travello.model.usuario
+import br.senai.sp.jandira.projeto_travello.modelUsuario.usuario
 import br.senai.sp.jandira.projeto_travello.service.RetrofitFactory
 import br.senai.sp.jandira.projeto_travello.ui.theme.MontserratFontFamily
 import retrofit2.Call
@@ -99,7 +99,7 @@ fun TravelloRegisterScreen(navegacao: NavHostController?) {
             Country(49, "Croácia"),
             Country(50, "Cuba"),
             Country(51, "Dinamarca"),
-                Country(52, "Djibuti"),
+            Country(52, "Djibuti"),
             Country(53, "Dominica"),
             Country(54, "Egito"),
             Country(55, "El Salvador"),

@@ -1,4 +1,4 @@
-package br.senai.sp.jandira.projeto_travello.model
+package br.senai.sp.jandira.projeto_travello.modelPais
 
 data class CountryResponse(
     val status: Boolean,

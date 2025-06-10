@@ -1,23 +1,19 @@
 package br.senai.sp.jandira.projeto_travello.service
 
-
-import br.senai.sp.jandira.projeto_travello.model.CountryResponse
-import br.senai.sp.jandira.projeto_travello.model.usuario
-import br.senai.sp.jandira.projeto_travello.model.Location
-import br.senai.sp.jandira.projeto_travello.model.UsuarioLoginRequest
-import br.senai.sp.jandira.projeto_travello.model.UsuarioLoginResponse
-import br.senai.sp.jandira.projeto_travello.model.viagem
-
-
+    import br.senai.sp.jandira.projeto_travello.modelLocalizacao.LocalizacaoDoGet
+    import br.senai.sp.jandira.projeto_travello.modelLocalizacao.LocalizacaoParaPost
+import br.senai.sp.jandira.projeto_travello.modelLocalizacao.LocationListResponse // Importe o novo modelo!
+import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.POST
+    import retrofit2.http.Headers
+    import retrofit2.http.POST
 
-class LocalizacaoService {
-//    @Headers("Content-Type: application/json")
-//    @POST("usuario")
-//    fun registerUser(@Body user: usuario): retrofit2.Call<usuario>
+interface LocationService {
+    @Headers("Content-Type: application/json")
+    @POST("localizacao") // Mantenha este, pois é para o POST de uma única localização
+    fun registerLocation(@Body localizacao: LocalizacaoParaPost): Call<LocalizacaoDoGet>
 
-
+    @GET("localizacao") // Altere o tipo de retorno para o novo modelo de resposta
+    fun getLocations(): Call<LocationListResponse> // <--- AGORA ESPERA LocationListResponse
 }

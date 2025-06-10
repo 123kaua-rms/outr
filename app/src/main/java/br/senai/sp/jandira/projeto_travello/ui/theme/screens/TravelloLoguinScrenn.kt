@@ -28,8 +28,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import br.senai.sp.jandira.ppppdm_school.screens.TravelloRegisterScreen
 import br.senai.sp.jandira.projeto_travello.R
-import br.senai.sp.jandira.projeto_travello.model.UsuarioLoginRequest
-import br.senai.sp.jandira.projeto_travello.model.UsuarioLoginResponse
+import br.senai.sp.jandira.projeto_travello.modelUsuario.UsuarioLoginRequest
+import br.senai.sp.jandira.projeto_travello.modelUsuario.UsuarioLoginResponse
 import br.senai.sp.jandira.projeto_travello.service.RetrofitFactory
 import br.senai.sp.jandira.projeto_travello.ui.theme.MontserratFontFamily
 import br.senai.sp.jandira.projeto_travello.ui.theme.Projeto_TravelloTheme

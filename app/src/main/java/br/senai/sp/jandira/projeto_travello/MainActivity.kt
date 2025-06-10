@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.senai.sp.jandira.ppppdm_school.screens.TravelloRegisterScreen
 import br.senai.sp.jandira.projeto_travello.ui.theme.Projeto_TravelloTheme
+//import br.senai.sp.jandira.projeto_travello.ui.theme.screens.TravelloHomeScreen
 import br.senai.sp.jandira.projeto_travello.ui.theme.screens.TravelloLoguinScreen
 import br.senai.sp.jandira.projeto_travello.ui.theme.screens.TravelloRegisterTrip
 
@@ -19,7 +20,7 @@ class MainActivity : ComponentActivity() {
                 val navegacao = rememberNavController()
                 NavHost(
                     navController = navegacao,
-                    startDestination = "register"
+                    startDestination = "home"
                 ) {
                     composable(route = "register") {
                         TravelloRegisterScreen(navegacao)
@@ -30,6 +31,9 @@ class MainActivity : ComponentActivity() {
                     composable(route = "cadastro_viagem") {
                         TravelloRegisterTrip(navegacao)
                     }
+//                    composable(route = "home") {
+//                        TravelloHomeScreen()
+//                    }
                 }
             }
         }
