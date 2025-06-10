@@ -12,10 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import br.senai.sp.jandira.projeto_travello.R
 
 
 data class Destination(
@@ -24,7 +28,7 @@ data class Destination(
 )
 
 @Composable
-fun TravelloHomeScreen() {
+fun TravelloHomeScreen(navegacao: NavHostController?) {
     val destinations = List(9) {
         Destination("Painemo Island", "Painemo Island")
     }
@@ -34,21 +38,25 @@ fun TravelloHomeScreen() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFF2196F3)) // cor de fundo azul
+                    .background(Color(0xFF2196F3))
                     .padding(16.dp)
             ) {
                 Column {
-                    Text(
-                        text = "Travello",
-                        color = Color.White,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold
+                    Image(
+                        painter = painterResource(id = R.drawable.logo_1),
+                        contentDescription = "Travel Image",
+                        modifier = Modifier.padding(8.dp),
+                        contentScale = ContentScale.Crop
                     )
+                    Spacer(modifier = Modifier.height(5.dp))
+
                     Text(
                         text = "Hi, username!",
                         color = Color.White,
                         fontSize = 16.sp
                     )
+                    Spacer(modifier = Modifier.height(5.dp))
+
                     Text(
                         text = "Find the best place",
                         color = Color.White,
@@ -135,5 +143,5 @@ fun DestinationCard(destination: Destination) {
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun TravelloHomeScreenPreview() {
-    TravelloHomeScreen()
+    TravelloHomeScreen(null)
 }
