@@ -1,4 +1,4 @@
-package br.senai.sp.jandira.projeto_travello.model
+package br.senai.sp.jandira.projeto_travello.model.modelViagem
 
 import com.google.gson.annotations.SerializedName // Importe esta anotação
 

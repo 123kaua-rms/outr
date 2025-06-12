@@ -1,6 +1,6 @@
-package br.senai.sp.jandira.projeto_travello.modelUsuario
+package br.senai.sp.jandira.projeto_travello.model.modelUsuario
 
-import br.senai.sp.jandira.projeto_travello.modelPais.PaisGet
+import br.senai.sp.jandira.projeto_travello.model.modelPais.PaisGet
 
 data class UsuarioGet(
     val id: Int,

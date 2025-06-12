@@ -11,7 +11,7 @@ import br.senai.sp.jandira.projeto_travello.ui.theme.Projeto_TravelloTheme
 import br.senai.sp.jandira.projeto_travello.ui.theme.screens.TravelloHomeScreenPreview
 //import br.senai.sp.jandira.projeto_travello.ui.theme.screens.TravelloHomeScreen
 import br.senai.sp.jandira.projeto_travello.ui.theme.screens.TravelloLoguinScreen
-import br.senai.sp.jandira.projeto_travello.ui.theme.screens.TravelloRegisterTrip
+//import br.senai.sp.jandira.projeto_travello.ui.theme.screens.TravelloRegisterTrip
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

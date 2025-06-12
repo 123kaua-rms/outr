@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import br.senai.sp.jandira.projeto_travello.R
-import br.senai.sp.jandira.projeto_travello.modelUsuario.usuario
+import br.senai.sp.jandira.projeto_travello.model.modelUsuario.usuario
 import br.senai.sp.jandira.projeto_travello.service.RetrofitFactory
 import br.senai.sp.jandira.projeto_travello.ui.theme.MontserratFontFamily
 import retrofit2.Call

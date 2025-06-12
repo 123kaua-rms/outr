@@ -1,6 +1,6 @@
-package br.senai.sp.jandira.projeto_travello.modelUsuario
+package br.senai.sp.jandira.projeto_travello.model.modelUsuario
 
-import br.senai.sp.jandira.projeto_travello.modelUsuario.usuario
+import br.senai.sp.jandira.projeto_travello.model.modelUsuario.usuario
 
 data class UsuarioLoginResponse(
     val status: Boolean,

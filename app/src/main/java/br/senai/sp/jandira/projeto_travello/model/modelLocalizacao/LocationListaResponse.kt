@@ -1,4 +1,4 @@
-package br.senai.sp.jandira.projeto_travello.modelLocalizacao
+package br.senai.sp.jandira.projeto_travello.model.modelLocalizacao
 
 import com.google.gson.annotations.SerializedName
 

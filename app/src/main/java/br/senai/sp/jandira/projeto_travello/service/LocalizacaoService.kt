@@ -1,8 +1,8 @@
 package br.senai.sp.jandira.projeto_travello.service
 
-    import br.senai.sp.jandira.projeto_travello.modelLocalizacao.LocalizacaoDoGet
-    import br.senai.sp.jandira.projeto_travello.modelLocalizacao.LocalizacaoParaPost
-import br.senai.sp.jandira.projeto_travello.modelLocalizacao.LocationListResponse // Importe o novo modelo!
+    import br.senai.sp.jandira.projeto_travello.model.modelLocalizacao.LocalizacaoDoGet
+    import br.senai.sp.jandira.projeto_travello.model.modelLocalizacao.LocalizacaoParaPost
+import br.senai.sp.jandira.projeto_travello.model.modelLocalizacao.LocationListResponse // Importe o novo modelo!
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET

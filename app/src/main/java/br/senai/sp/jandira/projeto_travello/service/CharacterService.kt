@@ -1,8 +1,8 @@
 package br.senai.sp.jandira.projeto_travello.service
 
-import br.senai.sp.jandira.projeto_travello.modelUsuario.usuario
-import br.senai.sp.jandira.projeto_travello.modelUsuario.UsuarioLoginRequest
-import br.senai.sp.jandira.projeto_travello.modelUsuario.UsuarioLoginResponse
+import br.senai.sp.jandira.projeto_travello.model.modelUsuario.usuario
+import br.senai.sp.jandira.projeto_travello.model.modelUsuario.UsuarioLoginRequest
+import br.senai.sp.jandira.projeto_travello.model.modelUsuario.UsuarioLoginResponse
 import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST

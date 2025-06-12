@@ -23,13 +23,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import br.senai.sp.jandira.projeto_travello.R
-import br.senai.sp.jandira.projeto_travello.model.Category
-import br.senai.sp.jandira.projeto_travello.modelPais.Country
-import br.senai.sp.jandira.projeto_travello.modelLocalizacao.LocalizacaoDoGet
-import br.senai.sp.jandira.projeto_travello.modelLocalizacao.LocalizacaoParaPost
-import br.senai.sp.jandira.projeto_travello.modelLocalizacao.LocationListResponse
-import br.senai.sp.jandira.projeto_travello.modelPais.viagem // Importa o modelo 'viagem' completo para a resposta
-import br.senai.sp.jandira.projeto_travello.model.ViagemParaPost // Importa o modelo para ENVIAR a requisição
+import br.senai.sp.jandira.projeto_travello.model.ModelCategoria.Category
+import br.senai.sp.jandira.projeto_travello.model.Viagem
+import br.senai.sp.jandira.projeto_travello.model.modelPais.Country
+import br.senai.sp.jandira.projeto_travello.model.modelLocalizacao.LocalizacaoDoGet
+import br.senai.sp.jandira.projeto_travello.model.modelLocalizacao.LocalizacaoParaPost
+import br.senai.sp.jandira.projeto_travello.model.modelLocalizacao.LocationListResponse
+import br.senai.sp.jandira.projeto_travello.model.modelViagem.ViagemParaPost // Importa o modelo para ENVIAR a requisição
 import br.senai.sp.jandira.projeto_travello.service.RetrofitFactory
 import br.senai.sp.jandira.projeto_travello.ui.theme.MontserratFontFamily
 import br.senai.sp.jandira.projeto_travello.ui.theme.Projeto_TravelloTheme
@@ -373,8 +373,8 @@ fun TravelloRegisterTrip(navegacao: NavHostController?) {
     // --- FUNÇÃO PARA CADASTRAR VIAGEM NO BACKEND ---
     fun registerTrip(newTripPost: ViagemParaPost) { // Recebe o modelo ViagemParaPost
         val call = RetrofitFactory().getTripService().registerTrip(newTripPost)
-        call.enqueue(object : Callback<viagem> { // Espera um objeto 'viagem' completo como resposta
-            override fun onResponse(call: Call<viagem>, response: Response<viagem>) {
+        call.enqueue(object : Callback<Viagem> { // Espera um objeto 'viagem' completo como resposta
+            override fun onResponse(call: Call<Viagem>, response: Response<Viagem>) {
                 if (response.isSuccessful) {
                     val createdTrip = response.body()
                     if (createdTrip != null && createdTrip.id != 0) {
@@ -391,7 +391,7 @@ fun TravelloRegisterTrip(navegacao: NavHostController?) {
                 }
             }
 
-            override fun onFailure(call: Call<viagem>, t: Throwable) {
+            override fun onFailure(call: Call<Viagem>, t: Throwable) {
                 Log.e("API_TRIP", "Falha na requisição para cadastrar viagem: ${t.message}")
                 // TODO: Mostrar mensagem de erro de conexão ao usuário
             }
@@ -488,6 +488,7 @@ fun TravelloRegisterTrip(navegacao: NavHostController?) {
         ) {
             Spacer(modifier = Modifier.height(20.dp))
 
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -495,12 +496,12 @@ fun TravelloRegisterTrip(navegacao: NavHostController?) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Spacer(modifier = Modifier.width(130.dp))
+                Spacer(modifier = Modifier.width(80.dp))
 
                 Image(
                     painter = painterResource(id = R.drawable.logo),
                     contentDescription = "Logo Travello",
-                    modifier = Modifier.height(35.dp),
+                    modifier = Modifier.height(40.dp),
                     contentScale = ContentScale.Crop
                 )
 
